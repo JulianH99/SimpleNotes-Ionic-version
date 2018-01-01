@@ -11,6 +11,11 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>notes</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only color="dark" (tap)="goToAdd()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
@@ -19,9 +24,9 @@
 <ion-content>
 
   <ion-list>
-    <ion-item-sliding *ngFor="let note of notes">
+    <ion-item-sliding *ngFor="let note of notes" (tap)="goToDetail(note.id)">
       <ion-item>
-        <h3>{{note.title}}</h3>
+        <h2>{{note.title}}</h2>
         <p>{{note.content}}</p>
       </ion-item>
       <ion-item-options>

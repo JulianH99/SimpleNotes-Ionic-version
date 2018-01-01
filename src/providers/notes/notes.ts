@@ -1,5 +1,4 @@
 import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Note, NoteId } from '../../interfaces/note';
@@ -18,7 +17,7 @@ export class NotesProvider {
   constructor(private afs: AngularFirestore) {
 
     this.notesCollection = this.afs.collection<Note>('notes', ref =>
-      ref.orderBy('created').where('trashed', '==', false));
+      ref.orderBy('created', "desc").where('trashed', '==', false));
 
     this.notes = this.notesCollection.snapshotChanges().map(actions =>{
       return actions.map(a => {
@@ -52,12 +51,14 @@ export class NotesProvider {
     return this.notesCollection.doc(id).update(note);
   }
 
-  fetchNote(id: string): Observable<NoteId> {
+  fetchNote(id: string): any {
     var doc = this.notesCollection.doc(id);
-    var data: any;
-    doc.valueChanges().subscribe(data => data = data)
 
-    return of({...data, id: id});
+    doc.valueChanges().subscribe(
+      data  => console.log(data)
+    );
+
+    return doc.valueChanges();
   }
 
 }

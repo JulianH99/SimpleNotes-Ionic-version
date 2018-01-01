@@ -2,6 +2,7 @@ import { NotesProvider } from './../../providers/notes/notes';
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { NoteId } from '../../interfaces/note';
+import { AddNotePage } from '../add-note/add-note';
 
 /**
  * Generated class for the NotesPage page.
@@ -30,6 +31,16 @@ export class NotesPage {
     this.notesProvider.fetchNotes().subscribe(
       notes => this.notes = notes
     );
+  }
+
+  goToAdd() {
+    this.navCtrl.push(AddNotePage)
+  }
+
+  goToDetail(id: string) {
+    this.navCtrl.push(AddNotePage, {
+      id: id
+    });
   }
 
 }
