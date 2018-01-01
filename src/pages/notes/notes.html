@@ -24,8 +24,8 @@
 <ion-content>
 
   <ion-list>
-    <ion-item-sliding *ngFor="let note of notes" (tap)="goToDetail(note.id)">
-      <ion-item>
+    <ion-item-sliding *ngFor="let note of notes" >
+      <ion-item (tap)="goToDetail(note.id)">
         <h2>{{note.title}}</h2>
         <p>{{note.content}}</p>
       </ion-item>
