@@ -17,7 +17,8 @@ export class NotesProvider {
 
   constructor(private afs: AngularFirestore) {
 
-    this.notesCollection = this.afs.collection<Note>('notes');
+    this.notesCollection = this.afs.collection<Note>('notes', ref =>
+      ref.orderBy('created').where('trashed', '==', false));
 
     this.notes = this.notesCollection.snapshotChanges().map(actions =>{
       return actions.map(a => {
