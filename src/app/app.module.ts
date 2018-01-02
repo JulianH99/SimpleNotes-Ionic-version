@@ -9,6 +9,7 @@ import { DirectivesModule } from '../directives/directives.module';
 import { MyApp } from './app.component';
 import { NotesPage } from '../pages/notes/notes';
 import { AddNotePage } from './../pages/add-note/add-note';
+import { TrashedNotesPage } from './../pages/trashed-notes/trashed-notes';
 import { firebaseConfig } from './env';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -19,7 +20,8 @@ import { NotesProvider } from '../providers/notes/notes';
   declarations: [
     MyApp,
     NotesPage,
-    AddNotePage
+    AddNotePage,
+    TrashedNotesPage
   ],
   imports: [
     BrowserModule,
@@ -33,7 +35,8 @@ import { NotesProvider } from '../providers/notes/notes';
   entryComponents: [
     MyApp,
     NotesPage,
-    AddNotePage
+    AddNotePage,
+    TrashedNotesPage
   ],
   providers: [
     StatusBar,

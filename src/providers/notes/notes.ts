@@ -12,13 +12,22 @@ import { Note, NoteId } from '../../interfaces/note';
 export class NotesProvider {
 
   private notesCollection: AngularFirestoreCollection<Note>;
+  private trashedNotesCollection: AngularFirestoreCollection<Note>;
   private notes: Observable<NoteId[]>;
+  private trashedNotes: Observable<NoteId[]>;
 
   constructor(private afs: AngularFirestore) {
 
     this.notesCollection = this.afs.collection<Note>('notes', ref =>
       ref.orderBy('created', "desc").where('trashed', '==', false));
 
+    this.trashedNotesCollection = this.afs.collection<Note>('notes', ref =>
+      ref.orderBy('created', 'desc').where('trashed', '==', true));
+
+
+  }
+
+  fetchNotes():  Observable<NoteId[]> {
     this.notes = this.notesCollection.snapshotChanges().map(actions =>{
       return actions.map(a => {
         const data = a.payload.doc.data() as Note;
@@ -27,10 +36,20 @@ export class NotesProvider {
       })
     })
 
+    return this.notes;
   }
 
-  fetchNotes():  Observable<NoteId[]> {
-    return this.notes;
+  fetchTrashedNotes(): Observable<NoteId[]> {
+    this.trashedNotes = this.trashedNotesCollection.snapshotChanges().map(
+      actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data() as Note;
+          const id = a.payload.doc.id;
+          return {id, ...data};
+        })
+      }
+    )
+    return this.trashedNotes;
   }
 
   addNote(note: Note): Promise<any> {
@@ -40,6 +59,12 @@ export class NotesProvider {
   deleteNote(id: string): Promise<any> {
     return this.notesCollection.doc(id).update({
       trashed: true
+    });
+  }
+
+  unDeleteNote(id: string): Promise<any> {
+    return this.trashedNotesCollection.doc(id).update({
+      trashed: false
     });
   }
 

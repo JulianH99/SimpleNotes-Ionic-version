@@ -21,10 +21,13 @@ export class NotesPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public notesProvider: NotesProvider) {
+
+
   }
 
   ionViewDidLoad() {
     this.fetchNotes();
+
   }
 
   fetchNotes() {
@@ -41,6 +44,12 @@ export class NotesPage {
     this.navCtrl.push(AddNotePage, {
       id: id
     });
+  }
+
+  deleteNote(id: string) {
+    this.notesProvider.deleteNote(id).then(
+      result => this.fetchNotes()
+    );
   }
 
 }

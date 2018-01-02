@@ -1,5 +1,5 @@
 <!--
-  Generated template for the NotesPage page.
+  Generated template for the TrashedNotesPage page.
 
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
@@ -10,29 +10,35 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>notes</ion-title>
+    <ion-title>Trashed notes</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only color="dark" (tap)="goToAdd()">
-        <ion-icon name="add"></ion-icon>
+      <button ion-button icon-only (tap)="undeleteAll()">
+        <ion-icon name="undo"></ion-icon>
+      </button>
+      <button ion-button icon-only (tap)="deleteAll()">
+        <ion-icon name="trash"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
-
 </ion-header>
 
 
 <ion-content>
 
-  <ion-list *ngIf="notes">
-    <ion-item-sliding *ngFor="let note of notes" >
-      <button ion-item (tap)="goToDetail(note.id)">
+  <ion-list>
+    <ion-item-sliding *ngFor="let note of notes">
+      <button ion-item>
         <h2>{{note.title}}</h2>
         <p>{{note.content}}</p>
       </button>
       <ion-item-options>
+        <button ion-button color="primary" (tap)="undeleteNote(note.id)">
+          <ion-icon name="undo"></ion-icon>
+          Undelete
+        </button>
         <button ion-button color="danger" (tap)="deleteNote(note.id)">
           <ion-icon name="trash"></ion-icon>
-          Delete
+          delete
         </button>
       </ion-item-options>
     </ion-item-sliding>

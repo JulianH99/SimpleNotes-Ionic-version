@@ -1,4 +1,3 @@
-import { Note } from './../../interfaces/note';
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { NotesProvider } from './../../providers/notes/notes';
