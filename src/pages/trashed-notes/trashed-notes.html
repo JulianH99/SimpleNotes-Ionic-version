@@ -25,7 +25,9 @@
 
 <ion-content>
 
-  <ion-list>
+  <ion-list *ngIf="notes">
+    <h2 *ngIf="notes.length == 0" text-center ion-text color="dark">There's no notes deleted yet</h2>
+
     <ion-item-sliding *ngFor="let note of notes">
       <button ion-item>
         <h2>{{note.title}}</h2>
@@ -43,5 +45,6 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
+
 
 </ion-content>
