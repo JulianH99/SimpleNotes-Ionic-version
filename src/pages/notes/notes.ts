@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { NoteId } from '../../interfaces/note';
 import { AddNotePage } from '../add-note/add-note';
+import { IntroPage } from './../intro/intro';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the NotesPage page.
@@ -20,12 +22,18 @@ export class NotesPage {
   public notes: NoteId[];
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    public notesProvider: NotesProvider) {
+    public notesProvider: NotesProvider, public storage: Storage) {
 
 
   }
 
   ionViewDidLoad() {
+    this.storage.get('intro-done').then(done => {
+      if(!done){
+        this.storage.set('intro-done', true);
+        this.navCtrl.setRoot(IntroPage)
+      }
+    })
     this.fetchNotes();
 
   }
