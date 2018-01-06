@@ -2,6 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Note, NoteId } from '../../interfaces/note';
+//import { AngularFireAuth } from 'angularfire2/auth';
 /*
   Generated class for the NotesProvider provider.
 
@@ -15,19 +16,20 @@ export class NotesProvider {
   private trashedNotesCollection: AngularFirestoreCollection<Note>;
   private notes: Observable<NoteId[]>;
   private trashedNotes: Observable<NoteId[]>;
+  private user: string;
 
   constructor(private afs: AngularFirestore) {
 
-    this.notesCollection = this.afs.collection<Note>('notes', ref =>
-      ref.orderBy('created', "desc").where('trashed', '==', false));
-
-    this.trashedNotesCollection = this.afs.collection<Note>('notes', ref =>
-      ref.orderBy('created', 'desc').where('trashed', '==', true));
-
-
   }
 
-  fetchNotes():  Observable<NoteId[]> {
+  fetchNotes(userEmail: string):  Observable<NoteId[]> {
+    this.notesCollection = this.afs.collection<Note>('notes', ref =>
+      ref.orderBy('created', "desc")
+      .where('trashed', '==', false)
+      .where('user', '==', userEmail));
+
+    this.user = userEmail;
+
     this.notes = this.notesCollection.snapshotChanges().map(actions =>{
       return actions.map(a => {
         const data = a.payload.doc.data() as Note;
@@ -40,6 +42,13 @@ export class NotesProvider {
   }
 
   fetchTrashedNotes(): Observable<NoteId[]> {
+
+    this.trashedNotesCollection = this.afs.collection<Note>('notes', ref =>
+      ref.orderBy('created', 'desc')
+      .where('trashed', '==', true)
+      .where('user', '==', this.user));
+
+
     this.trashedNotes = this.trashedNotesCollection.snapshotChanges().map(
       actions => {
         return actions.map(a => {
@@ -53,6 +62,7 @@ export class NotesProvider {
   }
 
   addNote(note: Note): Promise<any> {
+    note.user = this.user;
     return this.notesCollection.add(note);
   }
 
@@ -78,11 +88,6 @@ export class NotesProvider {
 
   fetchNote(id: string): any {
     var doc = this.notesCollection.doc(id);
-
-    doc.valueChanges().subscribe(
-      data  => console.log(data)
-    );
-
     return doc.valueChanges();
   }
 

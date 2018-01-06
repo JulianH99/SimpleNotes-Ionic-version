@@ -3,6 +3,7 @@ export interface Note {
   content: string;
   created?: Date;
   trashed?: boolean;
+  user?: string;
 };
 
 

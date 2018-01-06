@@ -1,10 +1,11 @@
-import { NotesProvider } from './../../providers/notes/notes';
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { NoteId } from '../../interfaces/note';
 import { AddNotePage } from '../add-note/add-note';
-import { IntroPage } from './../intro/intro';
 import { Storage } from '@ionic/storage';
+import { IntroPage } from './../intro/intro';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { NotesProvider } from './../../providers/notes/notes';
 
 /**
  * Generated class for the NotesPage page.
@@ -20,11 +21,11 @@ import { Storage } from '@ionic/storage';
 export class NotesPage {
 
   public notes: NoteId[];
+  private userEmail: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-    public notesProvider: NotesProvider, public storage: Storage) {
-
-
+  constructor(public navCtrl: NavController,
+    public notesProvider: NotesProvider, public storage: Storage,
+    public afAuth: AngularFireAuth) {
   }
 
   ionViewDidLoad() {
@@ -34,12 +35,23 @@ export class NotesPage {
         this.navCtrl.setRoot(IntroPage)
       }
     })
-    this.fetchNotes();
+    console.log('load');
+
+
+  }
+
+  ionViewDidEnter(){
+    this.afAuth.authState.subscribe(
+      user => {
+        this.userEmail = user.email;
+        this.fetchNotes();
+      }
+    )
 
   }
 
   fetchNotes() {
-    this.notesProvider.fetchNotes().subscribe(
+    this.notesProvider.fetchNotes(this.userEmail).subscribe(
       notes => this.notes = notes
     );
   }

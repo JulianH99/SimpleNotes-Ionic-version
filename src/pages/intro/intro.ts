@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { ToastController } from 'ionic-angular';
 import { NotesPage } from './../notes/notes';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { Storage } from '@ionic/storage';
+import * as firebase from 'firebase/app';
 
 /**
  * Generated class for the IntroPage page.
@@ -15,15 +19,33 @@ import { NotesPage } from './../notes/notes';
 })
 export class IntroPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+  constructor(public navCtrl: NavController,
+    public afAuth: AngularFireAuth, public toastCtrl: ToastController) {
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad IntroPage');
   }
 
   goToHome(){
     this.navCtrl.setRoot(NotesPage);
+  }
+
+  logIn(){
+    this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      .then(
+        auth => {
+          this.goToHome();
+        }
+      )
+      .catch(
+        err => {
+          let toast = this.toastCtrl.create({
+            message: err.message,
+            showCloseButton: true,
+            closeButtonText: 'OK'
+          });
+
+          toast.present()
+        }
+      );
   }
 
 }
