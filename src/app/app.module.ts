@@ -7,6 +7,8 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { FormsModule } from '@angular/forms';
 import { DirectivesModule } from '../directives/directives.module';
 import { IonicStorageModule } from '@ionic/storage';
+import { TooltipsModule } from 'ionic-tooltips';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GooglePlus } from '@ionic-native/google-plus';
 
 import { MyApp } from './app.component';
@@ -30,12 +32,14 @@ import { NotesProvider } from '../providers/notes/notes';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     DirectivesModule,
+    TooltipsModule,
     IonicStorageModule.forRoot(),
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(firebaseConfig),
-    AngularFirestoreModule,
+    AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule
   ],
   bootstrap: [IonicApp],

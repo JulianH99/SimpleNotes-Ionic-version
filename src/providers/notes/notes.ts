@@ -22,13 +22,15 @@ export class NotesProvider {
 
   }
 
-  fetchNotes(userEmail: string):  Observable<NoteId[]> {
+  setUser(user: string) {
+    this.user = user;
+  }
+
+  fetchNotes():  Observable<NoteId[]> {
     this.notesCollection = this.afs.collection<Note>('notes', ref =>
       ref.orderBy('created', "desc")
       .where('trashed', '==', false)
-      .where('user', '==', userEmail));
-
-    this.user = userEmail;
+      .where('user', '==', this.user));
 
     this.notes = this.notesCollection.snapshotChanges().map(actions =>{
       return actions.map(a => {

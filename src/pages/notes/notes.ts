@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 import { NoteId } from '../../interfaces/note';
 import { AddNotePage } from '../add-note/add-note';
 import { Storage } from '@ionic/storage';
@@ -21,7 +21,7 @@ import { NotesProvider } from './../../providers/notes/notes';
 export class NotesPage {
 
   public notes: NoteId[];
-  private userEmail: string;
+  public selectedNotes: Array<string> = [];
 
   constructor(public navCtrl: NavController,
     public notesProvider: NotesProvider, public storage: Storage,
@@ -35,23 +35,19 @@ export class NotesPage {
         this.navCtrl.setRoot(IntroPage)
       }
     })
-    console.log('load');
-
-
   }
 
   ionViewDidEnter(){
     this.afAuth.authState.subscribe(
       user => {
-        this.userEmail = user.email;
+        this.notesProvider.setUser(user.email);
         this.fetchNotes();
       }
     )
-
   }
 
   fetchNotes() {
-    this.notesProvider.fetchNotes(this.userEmail).subscribe(
+    this.notesProvider.fetchNotes().subscribe(
       notes => this.notes = notes
     );
   }
@@ -70,6 +66,29 @@ export class NotesPage {
     this.notesProvider.deleteNote(id).then(
       result => this.fetchNotes()
     );
+  }
+
+  deselectAll() {
+    this.selectedNotes.splice(0, this.selectedNotes.length)
+  }
+
+  select(noteId: string) {
+
+    if(this.selectedNotes.indexOf(noteId) != -1){
+      this.selectedNotes.splice(this.selectedNotes.indexOf(noteId), 1);
+      return;
+    }
+    this.selectedNotes.push(noteId);
+  }
+
+  selected(id: string): boolean {
+    return this.selectedNotes.indexOf(id) != -1;
+  }
+
+  deleteSelected() {
+
+    this.selectedNotes.forEach(note => this.deleteNote(note));
+
   }
 
 }

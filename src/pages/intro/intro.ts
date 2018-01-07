@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { NotesPage } from './../notes/notes';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { Storage } from '@ionic/storage';
 import * as firebase from 'firebase/app';
 import { GooglePlus } from '@ionic-native/google-plus';
 

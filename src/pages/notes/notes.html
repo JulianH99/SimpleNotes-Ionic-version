@@ -12,7 +12,14 @@
     </button>
     <ion-title>notes</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only color="dark" (tap)="goToAdd()">
+      <button *ngIf="selectedNotes.length > 0" ion-button icon-only
+        tooltip="Delete selected" duration="1000" positionH="left" event="press" arrow
+        (tap)="deleteSelected()">
+        <ion-icon name="trash"></ion-icon>
+      </button>
+      <button ion-button icon-only color="dark"
+        duration="1000" tooltip="Add a note" positionH="left" event="press" arrow
+        (tap)="goToAdd()">
         <ion-icon name="add"></ion-icon>
       </button>
     </ion-buttons>
@@ -25,15 +32,23 @@
 
   <ion-list *ngIf="notes">
     <h2 *ngIf="notes.length == 0" text-center ion-text color="dark">There's no notes added yet</h2>
-    <ion-item-sliding *ngFor="let note of notes" >
-      <button ion-item (tap)="goToDetail(note.id)">
+    <ion-item-sliding *ngFor="let note of notes"
+      [class.selected]="selected(note.id)" >
+      <button ion-item (tap)="goToDetail(note.id)" (press)="select(note.id)">
         <h2>{{note.title}}</h2>
         <p>{{note.content}}</p>
       </button>
-      <ion-item-options>
+      <ion-item-options side="right">
         <button ion-button color="danger" (tap)="deleteNote(note.id)">
           <ion-icon name="trash"></ion-icon>
           Delete
+        </button>
+      </ion-item-options>
+      <ion-item-options side="left">
+        <button ion-button color="secondary" (tap)="select(note.id)">
+          <ion-icon name="checkbox"></ion-icon>
+          <span *ngIf="!selected(note.id)">Select</span>
+          <span *ngIf="selected(note.id)">deselect</span>
         </button>
       </ion-item-options>
     </ion-item-sliding>
@@ -41,3 +56,14 @@
 
 
 </ion-content>
+
+<ion-footer *ngIf="selectedNotes.length > 0">
+  <ion-toolbar color="dark">
+    <ion-buttons end>
+      <button icon-only ion-button (tap)="deselectAll()"
+        tooltip="Deselect all" duration="1000" positionH="left" arrow event="press">
+        <ion-icon name="undo"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

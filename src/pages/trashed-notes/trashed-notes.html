@@ -12,10 +12,12 @@
     </button>
     <ion-title>Trashed notes</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (tap)="undeleteAll()">
+      <button ion-button icon-only (tap)="undeleteAll()"
+        tooltip="Undelete all" duration="1000" positionH="left" arrow event="press">
         <ion-icon name="undo"></ion-icon>
       </button>
-      <button ion-button icon-only (tap)="deleteAll()">
+      <button ion-button icon-only (tap)="deleteAll()"
+        tooltip="Delete all" duration="1000" positionH="left" arrow event="press">
         <ion-icon name="trash"></ion-icon>
       </button>
     </ion-buttons>
