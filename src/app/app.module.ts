@@ -7,6 +7,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { FormsModule } from '@angular/forms';
 import { DirectivesModule } from '../directives/directives.module';
 import { IonicStorageModule } from '@ionic/storage';
+import { GooglePlus } from '@ionic-native/google-plus';
 
 import { MyApp } from './app.component';
 import { NotesPage } from '../pages/notes/notes';
@@ -49,7 +50,8 @@ import { NotesProvider } from '../providers/notes/notes';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    NotesProvider
+    NotesProvider,
+    GooglePlus
   ]
 })
 export class AppModule {}
