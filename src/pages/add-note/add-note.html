@@ -19,18 +19,21 @@
       <ion-input id="title-input" type="text" placeholder="Title" [(ngModel)]="note.title"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-textarea autosize placeholder="Content" [(ngModel)]="note.content"></ion-textarea>
+      <ion-textarea autosize placeholder="Content*" [(ngModel)]="note.content"></ion-textarea>
+    </ion-item>
+    <ion-item *ngIf="!note.content">
+      <p ion-text color="danger">The content is required</p>
     </ion-item>
   </ion-list>
 </ion-content>
 
 <ion-footer >
   <ion-toolbar color="dark">
-    <ion-buttons end>
-      <button ion-button (tap)="addNote()" *ngIf="!id">
+    <ion-buttons end *ngIf="note">
+      <button ion-button (tap)="addNote()" [disabled]="!note.content" *ngIf="!id">
         Add note
       </button>
-      <button ion-button (tap)="updateNote()" *ngIf="id">
+      <button ion-button (tap)="updateNote()" [disabled]="!note.content" *ngIf="id">
         Update note
       </button>
     </ion-buttons>
