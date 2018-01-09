@@ -6,6 +6,7 @@ import { Storage } from '@ionic/storage';
 import { IntroPage } from './../intro/intro';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { NotesProvider } from './../../providers/notes/notes';
+import { LoadingController } from 'ionic-angular';
 
 /**
  * Generated class for the NotesPage page.
@@ -25,10 +26,12 @@ export class NotesPage {
 
   constructor(public navCtrl: NavController,
     public notesProvider: NotesProvider, public storage: Storage,
-    public afAuth: AngularFireAuth) {
+    public afAuth: AngularFireAuth, public loadingCtrl: LoadingController) {
+
   }
 
   ionViewDidLoad() {
+
     this.storage.get('intro-done').then(done => {
       if(!done){
         this.storage.set('intro-done', true);
@@ -38,17 +41,32 @@ export class NotesPage {
   }
 
   ionViewDidEnter(){
+
+
     this.afAuth.authState.subscribe(
       user => {
         this.notesProvider.setUser(user.email);
         this.fetchNotes();
+
       }
     )
   }
 
   fetchNotes() {
+
+    var loading: any;
+    if(!this.notes){
+      loading = this.loadingCtrl.create({content:'Loading notes...'});
+      loading.present();
+    }
+
     this.notesProvider.fetchNotes().subscribe(
-      notes => this.notes = notes
+      notes => {
+        if(!this.notes)
+          loading.dismiss()
+        this.notes = notes;
+
+      }
     );
   }
 

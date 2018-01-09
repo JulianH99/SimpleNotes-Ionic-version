@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
+import { LoadingController } from 'ionic-angular';
 import { NotesProvider } from './../../providers/notes/notes';
 import { NoteId } from './../../interfaces/note';
 
@@ -18,14 +19,25 @@ export class TrashedNotesPage {
 
   public notes: NoteId[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-    public notesProvider: NotesProvider) {
+  constructor(public navCtrl: NavController,
+    public notesProvider: NotesProvider,
+    public loadingCtrl: LoadingController) {
       //this.fetchNotes();
   }
 
   fetchNotes() {
+
+    var loading: any;
+    if(!this.notes){
+      loading = this.loadingCtrl.create({content: 'Loading notes...'})
+      loading.present();
+    }
     this.notesProvider.fetchTrashedNotes().subscribe(
-      notes => this.notes = notes
+      notes => {
+        if(!this.notes)
+          loading.dismiss();
+        this.notes = notes;
+      }
     );
 
   }
